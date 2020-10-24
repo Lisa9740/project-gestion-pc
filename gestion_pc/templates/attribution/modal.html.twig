@@ -1,0 +1,20 @@
+{% embed 'modal/base.html.twig' %}
+    {% block modal_id %}view-customer-attribution{{ attribution }}{% endblock %}
+    {% block modal_title %}Attribution du pc{% endblock %}
+    {% block modal_body %}
+        <div class="container">
+            <div id="atribution_content{{ attribution }}">
+                <h2 class="computer-name"></h2>
+                <ul class="list-group text-justify">
+                    <li>Nom de l'utilisateur attribué :  <span class="user_name"></span></li>
+                    <li>Plage horaire :  <span class="hour_attribute"></span></li>
+                </ul>
+                <form method="post" action="{{ path('attribution_delete', {id: attribution}) }}"
+                      onsubmit="return confirm('Êtes vous sûrs ?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="btn btn-danger float-right" type="submit">Retirer attribution</button>
+                </form>
+        </div>
+    </div>
+    {% endblock %}
+{% endembed %}

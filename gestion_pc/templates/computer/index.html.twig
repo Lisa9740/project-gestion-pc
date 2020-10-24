@@ -1,0 +1,132 @@
+{% if (computers) %}
+    <div class="owl-carousel mt-5">
+        {% for computer in computers %}
+            <div>
+                <div class="card">
+                    <div class="card-header d-inline-block">
+                        <div class="row">
+                            <div class="col">
+                                <a href="" class="show-edit-computer-modal"
+                                   data-url="{{ path("computer_edit", {id : computer.id}) }}"
+                                   data-computer="{{ computer.id }}" data-toggle="modal"
+                                   data-target="#edit-computer{{ computer.id }}" id="modal-computer-edit">
+                                    <i class="fa fa-edit text-dark"></i></a>
+                                {{ computer.name }}
+                            </div>
+                            <div class="col">
+                                <form method="post" action="{{ path('computer_delete', {id: computer.id}) }}"
+                                      onsubmit="return confirm('Êtes vous sûrs ?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button class="float-right btn btn-danger" type="submit"><i
+                                                class="fas fa-times-circle"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            </thead>
+                            <tbody>
+
+                            {% for i in 8..18 %}
+                                <tr>
+                                    <td>
+                                        <span class="float-left ml-5">{{ i }} h</span>
+
+                                        {% for attribution in attributions %}
+                                            {% if attribution.computer.id == computer.id %}
+                                                {%  if attribution.customer|length != 0 and attribution.hour is same as i %}
+                                                    <a href="" data-hour="{{ attribution.hour }}" data-computer="{{ computer.id }}" data-attribution="{{ attribution.id }}"
+                                                       class="float-right modal-trigger" data-toggle="modal" data-customer="{{ attribution.customer.name }}"
+                                                       data-customer-id="{{ attribution.customer.id }}"  data-target="#view-customer-attribution{{ attribution.id }}">
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye"
+                                                             fill="green" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                                                            <path fill-rule="evenodd"
+                                                                  d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                                        </svg>
+                                                    </a>
+                                                    <span class="attributed-customer">{{ attribution.customer.name }}</span>
+                                                {% endif %}
+                                            {% endif %}
+
+                                        {% endfor %}
+                                        <a href="" data-hour="{{ i }}"
+                                           data-computer="{{ computer.id }}"
+                                           class="add-customer-attribution float-right" data-toggle="modal"
+                                           data-target="#add-customer-attribution" id="modal-attribution">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                 class="bi bi-plus-circle-fill" fill="currentColor"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% block modals %}
+        {% for computer in computers %}
+            {% include 'computer/modal/edit.html.twig' with {computer : computer.id} %}
+            {% for attribution in computer.attributions %}
+                {% include 'attribution/modal.html.twig' with { attribution : attribution.id } %}
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+{% endif %}
+ {% include 'customer/create.html.twig' %}
+{% block javascripts %}
+    <script>
+        $(function() {
+
+            const countAttributeCustomer = $('.attributed-customer + .add-customer-attribution').length;
+            for (let y = 0; y < countAttributeCustomer; y++) {
+                $('.attributed-customer').hide()
+                $('.attributed-customer + .add-customer-attribution').hide()
+            }
+
+            $(".owl-carousel").owlCarousel({
+                items: 3,
+                margin: 15,
+                navElement: 'i',
+                navText: ['<span class="btn btn-primary"><i class="fas fa-chevron-left"></i></span>', '<span class="btn btn-primary"><i class="fas fa-chevron-right"></i></span>'],
+                navContainer: $(".nav-container"),
+                nav: true,
+            });
+
+            {#$(function () {#}
+
+            {#    const customers = [];#}
+            {#    {% for customer in customers %}#}
+            {#    customers.push("{{ customer.lastname }}")#}
+            {#    {% endfor %}#}
+
+            {#    $("#lastname").mdbAutocomplete({#}
+            {#        data: customers#}
+            {#    })#}
+            {#})#}
+
+
+            {% for computer in computers %}
+            {% for attribution in computer.attributions %}
+            $('#view-customer-attribution{{ attribution.id }}').on('show.bs.modal', e => {
+                const customer = $(e.relatedTarget).data('customer')
+                $('#atribution_content{{ attribution.id }} > ul li .user_name').text(customer);
+                $('#atribution_content{{ attribution.id }} > .computer-name').text('{{ computer.name }}');
+                $('#atribution_content{{ attribution.id }} > ul li .hour_attribute').text('{{ attribution.hour }} h - {{ attribution.hour + 1 }} h');
+            })
+            {% endfor %}
+            {% endfor %}
+        })
+
+    </script>
+{% endblock %}

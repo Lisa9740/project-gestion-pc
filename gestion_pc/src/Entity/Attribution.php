@@ -33,7 +33,7 @@ class Attribution
     private $computer;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="attributions")
+     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="attributions", cascade={"persist"})
      */
     private $customer;
 

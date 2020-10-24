@@ -1,0 +1,10 @@
+{% embed 'modal/base.html.twig' %}
+    {% block modal_id %}edit-computer{{ computer}}{% endblock %}
+    {% block modal_title %}Modifier un ordinateur{% endblock %}
+    {% block modal_body %}
+        {{ form_start(forms[computer], { "action" : path("computer_edit", {id : computer}) }) }}
+        {{ form_widget(forms[computer]) }}
+        <button id="computer-edit-btn-submit" data-computer="" class="btn btn-primary"> Modifier</button>
+        {{ form_end(forms[computer]) }}
+    {% endblock %}
+{% endembed %}

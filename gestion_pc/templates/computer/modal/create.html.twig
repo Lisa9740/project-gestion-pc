@@ -1,0 +1,12 @@
+{% embed 'modal/base.html.twig' %}
+    {% block modal_id %}add-computer{% endblock %}
+    {% block modal_title %}Ajouter un ordinateur{% endblock %}
+    {% block modal_body %}
+        <form action="{{ path('computer_create') }}" method="post">
+            <label>
+                Nom du pc
+                <input type="text" name="name">
+            </label>
+        </form>
+    {% endblock %}
+{% endembed %}

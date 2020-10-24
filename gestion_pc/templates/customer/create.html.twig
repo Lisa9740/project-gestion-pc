@@ -1,0 +1,15 @@
+{% embed 'modal/base.html.twig' %}
+    {% block modal_id %}add-customer-attribution{% endblock %}
+    {% block modal_title %}Attribuer utilisateur{% endblock %}
+    {% block modal_body %}
+        <form action="{{ path('attribution_create') }}" method="post">
+            <label> Entrer le nom de l'utilisateur :</label>
+            <div class="ui-widget">
+                <input type="text" name="name" id="lastname">
+            </div>
+            <input type="hidden" name="computer" id="computer">
+            <button type="submit">Ajouter</button>
+            <input type="hidden" name="hour" id="hour">
+        </form>
+    {% endblock %}
+{% endembed %}
