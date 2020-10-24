@@ -24,8 +24,8 @@
     </nav>
     <div class="container p-5">
         <input type="date" id="date-input" min="{{ date }}">
-        <div class="nav-container py-3"></div>
         <button class="float-right btn btn-primary" data-toggle="modal" data-target="#add-computer"> Ajouter un ordinateur</button>
+        <div class="nav-container py-3"></div>
         {% include 'computer/modal/create.html.twig' %}
         {{ render(controller('App\\Controller\\ComputerController::indexComputer')) }}
     </div>
@@ -35,9 +35,11 @@
         const editComputerContainer = $('#edit-computer-container')
         $("#add-customer-attribution").on('show.bs.modal', function (e) {
             const hour = $(e.relatedTarget).data('hour');
-            const computer = $(e.relatedTarget).data('computer');
-            $(this).find('#hour').val(hour);
-            $(this).find('#computer').val(computer);
+            const computer = $(e.relatedTarget).data('computer')
+            $(this).find('#hour').val(hour)
+            $(this).find('.attribution-hour').text(hour + 'h - Durée 1h' )
+
+            $(this).find('#computer').val(computer)
         });
         $('#date-input').val({{ date }})
     </script>

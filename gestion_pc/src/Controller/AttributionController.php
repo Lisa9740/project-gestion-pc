@@ -69,7 +69,7 @@ class AttributionController extends AbstractController
     /**
      * @Route("/attribution/{id}/delete", name="attribution_delete", methods={"DELETE"})
      */
-    public function deleteCustomerAtribution(Attribution $atribution)
+    public function deleteCustomerAttribution(Attribution $atribution)
     {
         $entityManager = $this->getDoctrine()->getManager();
 

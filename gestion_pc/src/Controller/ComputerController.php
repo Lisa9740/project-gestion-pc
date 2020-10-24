@@ -21,11 +21,11 @@ class ComputerController extends AbstractController
      * @param ComputerRepository $repo
      * @return Response
      */
-    public function indexComputer(ComputerRepository $repo, AttributionRepository $atributionRepository, CustomerRepository $customerRepository)
+    public function indexComputer(ComputerRepository $repo, AttributionRepository $attributionRepository, CustomerRepository $customerRepository)
     {
         $computer = $repo->findAll();
         $customer = $customerRepository->findAll();
-        $attribution = $atributionRepository->findAll();
+        $attribution = $attributionRepository->findAll();
 
         $forms = [];
         foreach ($computer as $index){
@@ -61,6 +61,7 @@ class ComputerController extends AbstractController
         for ( $i=8; $i<19; $i++){
             $attribution = (new Attribution())
                 ->setHour($i)
+                ->setDate(new \DateTime())
                 ->setComputer($computer);
             $entityManager->persist($attribution);
         }
@@ -94,10 +95,10 @@ class ComputerController extends AbstractController
     /**
      * @Route("/computer/{id}/delete", name="computer_delete", methods={"DELETE"})
      */
-    public function deleteComputer(Computer $computer, ComputerRepository $computerRepository)
+    public function deleteComputer(Computer $computer)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $attributions = $computerRepository->find($computer)->getAttributions();
+        $attributions = $computer->getAttributions();
 
         foreach ($attributions as $attribution){
             $computer->removeAttribution($attribution);

@@ -2,14 +2,19 @@
     {% block modal_id %}add-customer-attribution{% endblock %}
     {% block modal_title %}Attribuer utilisateur{% endblock %}
     {% block modal_body %}
-        <form action="{{ path('attribution_create') }}" method="post">
-            <label> Entrer le nom de l'utilisateur :</label>
-            <div class="ui-widget">
-                <input type="text" name="name" id="lastname">
-            </div>
-            <input type="hidden" name="computer" id="computer">
-            <button type="submit">Ajouter</button>
-            <input type="hidden" name="hour" id="hour">
-        </form>
+        <ul>
+            <li>Créneaux horaires :  <span class="attribution-hour"></span></li>
+        </ul>
+        <div class="container">
+            <form action="{{ path('attribution_create') }}" method="post">
+                <label> Entrer le nom de l'utilisateur :</label>
+                <div class="ui-widget d-inline-block">
+                    <input type="text" name="name" id="lastname">
+                </div>
+                <input type="hidden" name="computer" id="computer">
+                <button class="btn btn-primary" type="submit">Ajouter</button>
+                <input type="hidden" name="hour" id="hour">
+            </form>
+        </div>
     {% endblock %}
 {% endembed %}

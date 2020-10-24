@@ -22,14 +22,7 @@ class AppFixtures extends Fixture
     {
         $adminUser = new User();
 
-        $adminUser->setName('Alison Barret')
-            ->setEmail('barretalison@gmail.com')
-            ->setHash($this->encoder->encodePassword($adminUser, 'password'));
-
-        $manager->persist($adminUser);
-
         for ($i = 1; $i <= 5; $i++) {
-
             $computer = new Computer();
             $computer->setName('PC' . $i);
             $manager->persist($computer);
@@ -41,6 +34,11 @@ class AppFixtures extends Fixture
                 $manager->persist($attribution);
             }
         }
+        $adminUser->setName('Alison Barret')
+            ->setEmail('barretalison@gmail.com')
+            ->setHash($this->encoder->encodePassword($adminUser, 'password'));
+
+        $manager->persist($adminUser);
 
         $manager->flush();
     }
