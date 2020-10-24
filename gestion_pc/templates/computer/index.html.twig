@@ -88,6 +88,18 @@
 {% block javascripts %}
     <script>
         $(function() {
+
+            $(function () {
+
+                const customers = [];
+                {% for customer in customers %}
+                customers.push("{{ customer.name }}")
+                {% endfor %}
+
+                $("#name").autocomplete({
+                    source: customers
+                })
+            })
             const countAttributeCustomer = $('.attributed-customer + .add-customer-attribution').length;
             for (let y = 0; y < countAttributeCustomer; y++) {
                 $('.attributed-customer').hide()
@@ -105,14 +117,14 @@
 
 
             {% for computer in computers %}
-            {% for attribution in computer.attributions %}
-            $('#view-customer-attribution{{ attribution.id }}').on('show.bs.modal', e => {
-                const customer = $(e.relatedTarget).data('customer')
-                $('#atribution_content{{ attribution.id }} > ul li .user_name').text(customer);
-                $('#atribution_content{{ attribution.id }} > .computer-name').text('{{ computer.name }}');
-                $('#atribution_content{{ attribution.id }} > ul li .hour_attribute').text('{{ attribution.hour }} h - {{ attribution.hour + 1 }} h');
-            })
-            {% endfor %}
+                {% for attribution in computer.attributions %}
+                $('#view-customer-attribution{{ attribution.id }}').on('show.bs.modal', e => {
+                    const customer = $(e.relatedTarget).data('customer')
+                    $('#atribution_content{{ attribution.id }} > ul li .user_name').text(customer);
+                    $('#atribution_content{{ attribution.id }} > .computer-name').text('{{ computer.name }}');
+                    $('#atribution_content{{ attribution.id }} > ul li .hour_attribute').text('{{ attribution.hour }} h - {{ attribution.hour + 1 }} h');
+                })
+                {% endfor %}
             {% endfor %}
         })
 

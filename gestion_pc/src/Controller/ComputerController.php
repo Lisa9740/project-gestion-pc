@@ -106,6 +106,7 @@ class ComputerController extends AbstractController
 
         $entityManager->remove($computer);
         $entityManager->flush();
+        $this->addFlash('success', $computer->getName() . ' à bien été supprimé.');
         return $this->redirectToRoute('home');
     }
 
