@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
         }
         $adminUser->setName('Alison Barret')
             ->setEmail('barretalison@gmail.com')
-            ->setHash($this->encoder->encodePassword($adminUser, 'password'));
+            ->setHash($this->encoder->encodePassword($adminUser, 'sword'));
 
         $manager->persist($adminUser);
 
