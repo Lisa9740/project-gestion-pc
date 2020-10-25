@@ -2,11 +2,16 @@
     {% block modal_id %}add-computer{% endblock %}
     {% block modal_title %}Ajouter un ordinateur{% endblock %}
     {% block modal_body %}
-        <form action="{{ path('computer_create') }}" method="post">
-            <label>
-                Nom du pc
-                <input type="text" name="name">
-            </label>
-        </form>
+        <div class="container">
+            <div class="d-inline-block">
+                <form action="{{ path('computer_create') }}" method="post">
+                    <label>
+                        Nom du pc
+                        <input type="text" name="name">
+                    </label>
+                    <button class="btn btn-lg btn-primary" type="submit"><i class="fa fa-plus"></i> </button>
+                </form>
+            </div>
+        </div>
     {% endblock %}
 {% endembed %}

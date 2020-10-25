@@ -3,39 +3,11 @@
 {% block title %}Gestion PC{% endblock %}
 
 {% block body %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">Gestion PC</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <div class="float-right"><a class="nav-link " href="{{ path('app_logout') }}">Déconnexion</a></div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+{% include 'partials/nav.html.twig' %}
     <div class="container mt-5">
-        {% for label, messages in app.flashes %}
-            <div class="container">
-                <div class="alert alert-{{ label }}">
-                    {% for message in messages %}
-                        <p>{{ message | raw }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
-
         <div class="d-inline-block">
             <form action="{{ path('date') }}" method="post">
-            <input id="date-input" name="date" value="{{ date }}" class="datepicker"><button id="show_date" type="submit">Consulter date</button>
+                <input id="date-input" name="date" value="{{ date }}" class="datepicker"><button id="show_date" class="ml-2 btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
             </form>
         </div>
 
@@ -45,80 +17,4 @@
         {{ render(controller('App\\Controller\\ComputerController::indexComputer', { date : date })) }}
     </div>
 {% endblock %}
-{% block javascripts %}
-    <script>
-        const editComputerContainer = $('#edit-computer-container')
 
-        const countIsAttributed = $('#is_select_date_attr').length
-        $('#is_not_reserved').hide();
-        $('#date-input').on('change', e => {
-           const date = $(e.currentTarget).val()
-            const dateAttributed = $('#is_select_date_attr').data('attribution-date')
-            console.log(date);
-
-            for (let y = 0; y < countIsAttributed; y++) {
-
-                if ( dateAttributed !== date ) {
-                    $('#is_select_date_attr').hide();
-                    $('#is_not_reserved').show();
-                }
-            }
-
-        })
-
-
-
-
-        $.datepicker.regional['fr'] = {
-            dateFormat: 'dd/mm/yy',
-            closeText: 'Fermer',
-            prevText: '&#x3c;Préc',
-            nextText: 'Suiv&#x3e;',
-            currentText: 'Aujourd\'hui',
-            monthNames: ['Janvier','Fevrier','Mars','Avril','Mai','Juin',
-                'Juillet','Aout','Septembre','Octobre','Novembre','Decembre'],
-            monthNamesShort: ['Jan','Fev','Mar','Avr','Mai','Jun',
-                'Jul','Aou','Sep','Oct','Nov','Dec'],
-            dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-            dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-            dayNamesMin: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
-            weekHeader: 'Sm',
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: false,
-            yearSuffix: '',
-            minDate: 0,
-            maxDate: '+12M +0D',
-            numberOfMonths: 1,
-
-
-        };
-
-
-        $.datepicker.setDefaults($.datepicker.regional['fr']);
-
-        $('#date-input').datepicker()
-
-        const countAttributeCustomer = $('.attributed-customer + .add-customer-attribution').length;
-        for (let y = 0; y < countAttributeCustomer; y++) {
-            $('.attributed-customer').hide()
-
-            $('.attributed-customer + .add-customer-attribution').hide()
-        }
-        $('.ui-datepicker-week-end').on('click', function (){
-            location.reload()
-        })
-        $("#add-customer-attribution").on('shown.bs.modal', function (e) {
-            const date = $('#date-input').val()
-            const hour = $(e.relatedTarget).data('hour');
-            const computer = $(e.relatedTarget).data('computer')
-            $(this).find('#hour').val(hour)
-            $(this).find('.attribution-hour').text(hour + 'h - Durée 1h' )
-            $(this).find('.attribution-date').text(date)
-
-            $(this).find('#date').val(date)
-            $(this).find('#computer').val(computer)
-        });
-
-    </script>
-{% endblock %}

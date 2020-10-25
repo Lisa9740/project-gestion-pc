@@ -5,14 +5,11 @@ namespace App\Controller;
 use App\Entity\Atribution;
 use App\Entity\Attribution;
 use App\Entity\Customer;
-use App\Form\ComputerType;
-use App\Repository\AttributionRepository;
 use App\Repository\ComputerRepository;
 use App\Repository\CustomerRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AttributionController extends AbstractController
@@ -52,7 +49,7 @@ class AttributionController extends AbstractController
         $entityManager->persist($attribution);
         $entityManager->flush();
 
-        $this->addFlash('success', $computer->getName() . ' à bien été attribué à ' . $customer->getName() . ' à ' . $attribution->getDate()->format('d/m/Y'));
+        $this->addFlash('success', $computer->getName() . ' à bien été attribué à ' . $customer->getName() . ' le ' . $attribution->getDate()->format('d/m/Y'));
         return $this->redirectToRoute('date', [ 'date' => $attribution->getDate()->format('d/m/Y') ]);
 
     }
@@ -60,13 +57,13 @@ class AttributionController extends AbstractController
     /**
      * @Route("/attribution/{id}/delete", name="attribution_delete", methods={"DELETE"})
      */
-    public function deleteCustomerAttribution(Attribution $atribution)
+    public function deleteCustomerAttribution(Attribution $attribution)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $entityManager->remove($atribution);
+        $entityManager->remove($attribution);
         $entityManager->flush();
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('date', [ 'date' => $attribution->getDate()->format('d/m/Y') ]);
     }
 
 }

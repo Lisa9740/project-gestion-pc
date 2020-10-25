@@ -6,3 +6,9 @@
     background: whitesmoke;
     padding: 10px;
 }
+.logo-center-block{
+    margin: 0 auto;
+}
+.ui-icon.ui-icon-circle-triangle-e {
+    float: right;
+}
