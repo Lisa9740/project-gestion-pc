@@ -8,6 +8,7 @@ use App\Form\ComputerType;
 use App\Repository\AttributionRepository;
 use App\Repository\ComputerRepository;
 use App\Repository\CustomerRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -21,11 +22,11 @@ class ComputerController extends AbstractController
      * @param ComputerRepository $repo
      * @return Response
      */
-    public function indexComputer(ComputerRepository $repo, AttributionRepository $attributionRepository, CustomerRepository $customerRepository)
+    public function indexComputer(RequestStack $requestStack, ComputerRepository $repo, AttributionRepository $attributionRepository, CustomerRepository $customerRepository)
     {
         $computer = $repo->findAll();
         $customer = $customerRepository->findAll();
-        $attribution = $attributionRepository->findAll();
+        $request = $requestStack->getCurrentRequest();
 
         $forms = [];
         foreach ($computer as $index){
@@ -39,13 +40,18 @@ class ComputerController extends AbstractController
             $form = $form->createView();
         }
 
+
+        $attributions = $attributionRepository->findAll();
+
         return $this->render('computer/index.html.twig', [
             'forms'  => $forms,
             'customers' => $customer,
             'computers' => $computer,
-            'attributions' => $attribution,
+            "date" => $request->attributes->get('date'),
+            'attributions' => $attributions,
         ]);
     }
+
 
     /**
      * @Route("/computer/new", name="computer_create", methods={"POST"})
@@ -55,13 +61,15 @@ class ComputerController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $name = $request->request->get('name');
+        $date = $request->request->get('date');
+        $date = DateTime::createFromFormat('d/m/Y', $date);
         $computer = (new Computer())
             ->setName($name);
 
         for ( $i=8; $i<19; $i++){
             $attribution = (new Attribution())
                 ->setHour($i)
-                ->setDate(new \DateTime())
+                ->setDate($date)
                 ->setComputer($computer);
             $entityManager->persist($attribution);
         }

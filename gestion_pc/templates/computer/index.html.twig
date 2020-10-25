@@ -34,26 +34,31 @@
                                     <td>
                                         <span class="float-left ml-5">{{ i }} h</span>
                                         {% for attribution in attributions %}
+                                            {% if attribution.date|date("d/m/Y") is same as date %}
                                             {% if attribution.computer %}
-                                                {% if attribution.computer.id == computer.id %}
-                                                    {%  if attribution.customer|length != 0 and attribution.hour is same as i %}
-                                                        <a href="" data-hour="{{ attribution.hour }}" data-computer="{{ computer.id }}" data-attribution="{{ attribution.id }}"
-                                                           class="float-right modal-trigger" data-toggle="modal" data-customer="{{ attribution.customer.name }}"
-                                                           data-customer-id="{{ attribution.customer.id }}"  data-target="#view-customer-attribution{{ attribution.id }}">
-                                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye"
-                                                                 fill="green" xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill-rule="evenodd"
-                                                                      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
-                                                                <path fill-rule="evenodd"
-                                                                      d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                                                            </svg>
-                                                        </a>
-                                                        <span class="attributed-customer">{{ attribution.customer.name }}</span>
+                                                    {% if attribution.computer.id == computer.id %}
+                                                        {%  if attribution.customer|length != 0 and attribution.hour is same as i %}
+                                                            <a href="" data-hour="{{ attribution.hour }}" data-computer="{{ computer.id }}" data-attribution="{{ attribution.id }}"
+                                                               data-attribution-date="{{ attribution.date|date("d/m/Y")}}"
+                                                               class="float-right modal-trigger" data-toggle="modal" data-customer="{{ attribution.customer.name }}"
+                                                               data-customer-id="{{ attribution.customer.id }}"  data-target="#view-customer-attribution{{ attribution.id }}" id="is_select_date_attr">
+                                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye"
+                                                                     fill="green" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd"
+                                                                          d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                                                                    <path fill-rule="evenodd"
+                                                                          d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                                                </svg>
+                                                            </a>
+                                                            <span class="attributed-customer">{{ attribution.customer.name }}</span>
+                                                        {% endif %}
                                                     {% endif %}
+
                                                 {% endif %}
                                             {% endif %}
 
                                         {% endfor %}
+
                                         <a href="" data-hour="{{ i }}"
                                            data-computer="{{ computer.id }}"
                                            class="add-customer-attribution float-right" data-toggle="modal"
@@ -89,8 +94,8 @@
     <script>
         $(function() {
 
+            //get autocomplete on add attribution user
             $(function () {
-
                 const customers = [];
                 {% for customer in customers %}
                 customers.push("{{ customer.name }}")
@@ -100,11 +105,7 @@
                     source: customers
                 })
             })
-            const countAttributeCustomer = $('.attributed-customer + .add-customer-attribution').length;
-            for (let y = 0; y < countAttributeCustomer; y++) {
-                $('.attributed-customer').hide()
-                $('.attributed-customer + .add-customer-attribution').hide()
-            }
+
 
             $(".owl-carousel").owlCarousel({
                 items: 4,
@@ -117,14 +118,17 @@
 
 
             {% for computer in computers %}
-                {% for attribution in computer.attributions %}
-                $('#view-customer-attribution{{ attribution.id }}').on('show.bs.modal', e => {
-                    const customer = $(e.relatedTarget).data('customer')
-                    $('#atribution_content{{ attribution.id }} > ul li .user_name').text(customer);
-                    $('#atribution_content{{ attribution.id }} > .computer-name').text('{{ computer.name }}');
-                    $('#atribution_content{{ attribution.id }} > ul li .hour_attribute').text('{{ attribution.hour }} h - {{ attribution.hour + 1 }} h');
-                })
-                {% endfor %}
+            {% for attribution in computer.attributions %}
+            $('#view-customer-attribution{{ attribution.id }}').on('show.bs.modal', e => {
+                const customer = $(e.relatedTarget).data('customer')
+                $('#atribution_content{{ attribution.id }} > ul li .user_name').text(customer);
+                $('#atribution_content{{ attribution.id }} > .computer-name').text('{{ computer.name }}');
+                $('#atribution_content{{ attribution.id }} > ul li .hour_attribute').text('{{ attribution.hour }} h - {{ attribution.hour + 1 }} h');
+                if ({{ attribution.date|date("d/m/Y") }} === {{ date }}){
+                    $('#atribution_content{{ attribution.id }} > ul li .date_attribute').text('{{ attribution.date|date("d/m/Y") }}');
+                }
+            })
+            {% endfor %}
             {% endfor %}
         })
 

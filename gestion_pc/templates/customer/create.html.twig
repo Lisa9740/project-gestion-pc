@@ -3,6 +3,7 @@
     {% block modal_title %}Attribuer utilisateur{% endblock %}
     {% block modal_body %}
         <ul>
+            <li>Date :  <span class="attribution-date"></span></li>
             <li>Créneaux horaires :  <span class="attribution-hour"></span></li>
         </ul>
         <div class="container">
@@ -14,6 +15,7 @@
                 <input type="hidden" name="computer" id="computer">
                 <button class="btn btn-primary" type="submit">Ajouter</button>
                 <input type="hidden" name="hour" id="hour">
+                <input type="hidden" name="date" id="date">
             </form>
         </div>
     {% endblock %}

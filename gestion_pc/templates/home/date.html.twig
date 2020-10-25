@@ -35,14 +35,14 @@
 
         <div class="d-inline-block">
             <form action="{{ path('date') }}" method="post">
-            <input id="date-input" name="date" value="{{ date }}" class="datepicker"><button id="show_date" type="submit">Consulter date</button>
+                <input id="date-input" name="date" value="{{ date|date('d/m/Y') }}" class="datepicker"><button id="show_date" type="submit">Consulter date</button>
             </form>
         </div>
 
         <button class="float-right btn btn-primary" data-toggle="modal" data-target="#add-computer"> Ajouter un ordinateur</button>
         <div class="nav-container py-3"></div>
         {% include 'computer/modal/create.html.twig' %}
-        {{ render(controller('App\\Controller\\ComputerController::indexComputer', { date : date })) }}
+        {{ render(controller('App\\Controller\\ComputerController::indexComputer', { date : date|date('d/m/Y') })) }}
     </div>
 {% endblock %}
 {% block javascripts %}
@@ -51,22 +51,6 @@
 
         const countIsAttributed = $('#is_select_date_attr').length
         $('#is_not_reserved').hide();
-        $('#date-input').on('change', e => {
-           const date = $(e.currentTarget).val()
-            const dateAttributed = $('#is_select_date_attr').data('attribution-date')
-            console.log(date);
-
-            for (let y = 0; y < countIsAttributed; y++) {
-
-                if ( dateAttributed !== date ) {
-                    $('#is_select_date_attr').hide();
-                    $('#is_not_reserved').show();
-                }
-            }
-
-        })
-
-
 
 
         $.datepicker.regional['fr'] = {
@@ -122,3 +106,4 @@
 
     </script>
 {% endblock %}
+
