@@ -61,15 +61,13 @@ class ComputerController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $name = $request->request->get('name');
-        $date = $request->request->get('date');
-        $date = DateTime::createFromFormat('d/m/Y', $date);
         $computer = (new Computer())
             ->setName($name);
 
         for ( $i=8; $i<19; $i++){
             $attribution = (new Attribution())
                 ->setHour($i)
-                ->setDate($date)
+                ->setDate(new \DateTime())
                 ->setComputer($computer);
             $entityManager->persist($attribution);
         }
